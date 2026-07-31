@@ -1,0 +1,107 @@
+@startuml Sequence_Validation_Inscription
+
+title Validation d'Inscription avec Preuve Photographique
+
+actor Superviseur
+participant Frontend as "Frontend\nReact"
+participant Backend as "Backend\nDjango REST"
+database DB as "Base de Données"
+participant FileStorage as "Stockage Fichiers\n(Local/S3)"
+participant Notification as "Système\nNotification"
+
+== Phase 1 : Soumission de la preuve ==
+
+Superviseur -> Frontend : 1. Consulte liste inscriptions\npendantes
+
+Frontend -> Backend : 2. GET /api/inscriptions/\npending?status=en_attente
+
+Backend -> DB : 3. Récupère inscriptions\navec preuves
+activate DB
+DB --> Backend : Liste Etudiant + preuve_path
+deactivate DB
+
+Frontend -> Frontend : 4. Affiche formulaire\navec image preuve
+
+== Phase 2 : Validation de l'inscription ==
+
+Superviseur -> Frontend : 5. Examine preuve\n(identité, document)
+
+Superviseur -> Frontend : 6. Clique Approuver\nou Rejeter
+
+alt Approbation
+  Frontend -> Backend : 7. POST /api/inscriptions/{id}/validate\n{\n  status: "approuvé",\n  raison: "Documents corrects"\n}
+
+  activate Backend
+    Backend -> Backend : 8. Vérifie permissions\n(is_superviseur)
+
+    Backend -> DB : 9. Récupère Etudiant\n& CodeInscription
+    activate DB
+    DB --> Backend : Données
+    deactivate DB
+
+    Backend -> DB : 10. Met à jour statut\nCodeInscription.statut = "utilisé"
+    activate DB
+    DB -> DB : UPDATE CodeInscription
+    DB --> Backend : Mise à jour confirmée
+    deactivate DB
+
+    Backend -> DB : 11. Active CustomUser\n(is_active = true)
+    activate DB
+    DB -> DB : UPDATE CustomUser
+    DB --> Backend : User activé
+    deactivate DB
+
+    Backend -> DB : 12. Crée log d'audit
+    activate DB
+    DB -> DB : INSERT AdminAuditLog
+    DB --> Backend : Log créé
+    deactivate DB
+
+    Backend -> Notification : 13. Envoie mail\nde confirmation
+    activate Notification
+    Notification --> Backend : Mail envoyé
+    deactivate Notification
+
+    Backend --> Frontend : 14. HTTP 200 OK\n{message: "Inscription validée"}
+
+    Frontend -> Frontend : 15. Actualise liste\net affiche confirmation
+
+    Frontend --> Superviseur : 16. Affiche notification\nsuccès
+
+else Rejet
+
+  Frontend -> Backend : 7. POST /api/inscriptions/{id}/reject\n{\n  status: "rejeté",\n  raison: "Documents invalides"\n}
+
+  activate Backend
+    Backend -> Backend : 8. Vérifie permissions
+
+    Backend -> DB : 9. Met à jour CodeInscription\nstatut = "expiré"
+    activate DB
+    DB -> DB : UPDATE CodeInscription
+    DB --> Backend : Mise à jour
+    deactivate DB
+
+    Backend -> DB : 10. Récupère email Etudiant\npour notification
+    activate DB
+    DB --> Backend : Email
+    deactivate DB
+
+    Backend -> Notification : 11. Envoie mail\nde rejet
+    activate Notification
+    Notification --> Backend : Mail envoyé
+    deactivate Notification
+
+    Backend -> DB : 12. Crée log d'audit
+    activate DB
+    DB -> DB : INSERT AdminAuditLog
+    DB --> Backend : Log créé
+    deactivate DB
+
+    Backend --> Frontend : 13. HTTP 200 OK
+    Frontend --> Superviseur : 14. Affiche message\nrejet confirmé
+
+  deactivate Backend
+
+end
+
+@enduml

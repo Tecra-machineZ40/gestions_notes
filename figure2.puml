@@ -1,0 +1,50 @@
+@startuml Architecture_Client_Serveur
+
+skinparam backgroundColor #FEFEFE
+skinparam ArrowColor #333333
+skinparam ComponentBackgroundColor #E8F4F8
+skinparam ComponentBorderColor #0066CC
+
+title Architecture Client-Serveur du Système de Gestion des Notes
+
+package "Couche Présentation" {
+  component [Navigateur Web] as Navigateur #E8F4F8
+  component [Frontend React/Vite] as Frontend #E8F4F8
+  component [Gestion d'État\n(Context API)] as State #E8F4F8
+}
+
+package "Couche Métier & API" {
+  component [Django REST Framework] as DRF #E8E8F4
+  component [ViewSets & Serializers] as ViewSets #E8E8F4
+  component [Logique Métier\n(Règles, Calculs)] as BusinessLogic #E8E8F4
+  component [Authentification JWT] as JWT #E8E8F4
+}
+
+package "Couche Persistance" {
+  database [PostgreSQL/SQLite] as DB #F4E8E8
+  component [ORM Django] as ORM #E8E8F4
+}
+
+Navigateur --> Frontend : Requêtes HTTP/HTTPS\nAffichage résultats
+Frontend --> State : Gestion état\napplication
+Frontend --> DRF : POST/GET/PUT/DELETE\n(appels API REST)
+DRF --> JWT : Vérification token JWT\nExpiration & Refresh
+DRF --> ViewSets : Routage & Sérialisation
+ViewSets --> BusinessLogic : Validation données\nRègles métier
+BusinessLogic --> ORM : Requêtes ORM\n(création/mise à jour)
+ORM --> DB : SQL\nOpérations CRUD
+
+note right of JWT
+  Access Token : 15 min
+  Refresh Token : 7 jours
+  Claims : user_id, role, email
+end note
+
+note right of BusinessLogic
+  • Calcul moyennes
+  • Vérification autorisations (RBAC)
+  • Synchronisation résultats
+  • Création logs d'audit
+end note
+
+@enduml

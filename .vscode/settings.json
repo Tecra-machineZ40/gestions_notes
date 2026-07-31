@@ -1,0 +1,16 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^cd \"c:\\\\Users\\\\TOCHIBA Z40 B\\\\Desktop\\\\Bureau\\\\gestions_notes\\\\backend\" ; python manage\\.py makemigrations$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\Users\\\\TOCHIBA Z40 B\\\\Desktop\\\\Bureau\\\\gestions_notes\\\\backend\" ; python manage\\.py makemigrations notes$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\Users\\\\TOCHIBA Z40 B\\\\Desktop\\\\Bureau\\\\gestions_notes\\\\backend\" ; python -m pip install djangorestframework djangorestframework-simplejwt$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

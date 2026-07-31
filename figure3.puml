@@ -1,0 +1,188 @@
+@startuml Modele_Donnees_EA
+
+skinparam backgroundColor #FEFEFE
+title Diagramme Entité-Association Logique
+
+entity CustomUser {
+  *id : INT [PK]
+  --
+  email : VARCHAR(255) [UNIQUE]
+  password_hash : VARCHAR(255)
+  first_name : VARCHAR(100)
+  last_name : VARCHAR(100)
+  role : ENUM(étudiant, enseignant, superviseur, admin)
+  is_active : BOOLEAN
+  created_at : DATETIME
+  updated_at : DATETIME
+}
+
+entity Etudiant {
+  *id : INT [PK]
+  user_id : INT [FK]
+  --
+  matricule : VARCHAR(50) [UNIQUE]
+  niveau : INT
+  numero_inscription : VARCHAR(50)
+  date_inscription : DATE
+}
+
+entity Enseignant {
+  *id : INT [PK]
+  user_id : INT [FK]
+  --
+  numero_employee : VARCHAR(50)
+  specialite : VARCHAR(255)
+  departement : VARCHAR(100)
+}
+
+entity Superviseur {
+  *id : INT [PK]
+  user_id : INT [FK]
+  --
+  titre : VARCHAR(100)
+  responsabilites : TEXT
+}
+
+entity Classe {
+  *id : INT [PK]
+  --
+  nom : VARCHAR(100)
+  code : VARCHAR(50) [UNIQUE]
+  niveau : INT
+  superviseur_id : INT [FK, nullable]
+  annee_academique_id : INT [FK]
+}
+
+entity AnneeAcademique {
+  *id : INT [PK]
+  --
+  libelle : VARCHAR(50)
+  annee_debut : INT
+  annee_fin : INT
+  is_active : BOOLEAN
+}
+
+entity Semestre {
+  *id : INT [PK]
+  annee_academique_id : INT [FK]
+  --
+  numero : INT
+  libelle : VARCHAR(100)
+  date_debut : DATE
+  date_fin : DATE
+}
+
+entity UE {
+  *id : INT [PK]
+  classe_id : INT [FK]
+  semestre_id : INT [FK]
+  --
+  code : VARCHAR(50)
+  libelle : VARCHAR(255)
+  credits : INT
+  coefficient : DECIMAL
+}
+
+entity Matiere {
+  *id : INT [PK]
+  ue_id : INT [FK]
+  enseignant_id : INT [FK, nullable]
+  --
+  code : VARCHAR(50)
+  libelle : VARCHAR(255)
+  type : ENUM(cours, TD, TP)
+}
+
+entity Session {
+  *id : INT [PK]
+  matiere_id : INT [FK]
+  --
+  numero : INT
+  libelle : VARCHAR(100)
+  date_session : DATE
+  type : ENUM(normale, rattrapage, examen)
+}
+
+entity Note {
+  *id : INT [PK]
+  etudiant_id : INT [FK]
+  matiere_id : INT [FK]
+  session_id : INT [FK]
+  --
+  valeur : DECIMAL(5,2)
+  date_saisie : DATETIME
+  enseignant_id : INT [FK]
+}
+
+entity ResultatUE {
+  *id : INT [PK]
+  etudiant_id : INT [FK]
+  ue_id : INT [FK]
+  --
+  moyenne : DECIMAL(5,2)
+  statut : ENUM(validée, non-validée)
+  date_calcul : DATETIME
+}
+
+entity ResultatSemestre {
+  *id : INT [PK]
+  etudiant_id : INT [FK]
+  semestre_id : INT [FK]
+  --
+  moyenne : DECIMAL(5,2)
+  credits_acquis : INT
+  date_calcul : DATETIME
+}
+
+entity CodeInscription {
+  *id : INT [PK]
+  etudiant_id : INT [FK]
+  --
+  code : VARCHAR(50) [UNIQUE]
+  statut : ENUM(actif, utilisé, expiré)
+  date_expiration : DATE
+}
+
+entity AdminAuditLog {
+  *id : INT [PK]
+  user_id : INT [FK]
+  --
+  action : VARCHAR(255)
+  entite : VARCHAR(100)
+  ancien_valeur : TEXT
+  nouveau_valeur : TEXT
+  timestamp : DATETIME
+}
+
+CustomUser ||--o| Etudiant : ""
+CustomUser ||--o| Enseignant : ""
+CustomUser ||--o| Superviseur : ""
+
+Classe }o--|| Superviseur : "a"
+Classe }o--|| AnneeAcademique : "belongs to"
+
+Semestre }o--|| AnneeAcademique : "belongs to"
+
+UE }o--|| Classe : "taught in"
+UE }o--|| Semestre : "offered in"
+
+Matiere }o--|| UE : "part of"
+Matiere }o--o| Enseignant : "taught by"
+
+Session }o--|| Matiere : "for"
+
+Note }o--|| Etudiant : "scored by"
+Note }o--|| Matiere : "for"
+Note }o--|| Session : "in"
+
+ResultatUE }o--|| Etudiant : "for"
+ResultatUE }o--|| UE : "of"
+
+ResultatSemestre }o--|| Etudiant : "for"
+ResultatSemestre }o--|| Semestre : "of"
+
+CodeInscription }o--|| Etudiant : "for"
+
+AdminAuditLog }o--|| CustomUser : "by"
+
+@enduml

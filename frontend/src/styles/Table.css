@@ -1,0 +1,101 @@
+/**
+ * Table.css - Styles pour les tableaux de données
+ */
+
+@import './variables.css';
+
+.table-container {
+  background-color: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.data-table thead {
+  background-color: var(--bg-secondary);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.data-table th {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.data-table tbody tr {
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--transition-fast);
+}
+
+.data-table tbody tr:hover {
+  background-color: var(--bg-secondary);
+}
+
+.data-table td {
+  padding: var(--spacing-md);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+/* Ligne en surbrillance */
+.data-table tbody tr.highlighted {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Actions */
+.actions-cell {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.btn-action {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.btn-action.edit {
+  color: var(--primary-color);
+}
+
+.btn-action.edit:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.btn-action.delete {
+  color: var(--error-color);
+}
+
+.btn-action.delete:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .data-table th,
+  .data-table td {
+    padding: var(--spacing-sm);
+    font-size: 12px;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .data-table {
+    min-width: 600px;
+  }
+}

@@ -1,0 +1,99 @@
+/**
+ * Card.css - Styles pour les cartes statistiques
+ */
+
+@import './variables.css';
+
+.card {
+  background-color: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+  border-left: 4px solid var(--primary-color);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+/* Variantes de couleur */
+.card-blue {
+  border-left-color: var(--primary-color);
+}
+
+.card-green {
+  border-left-color: var(--success-color);
+}
+
+.card-red {
+  border-left-color: var(--error-color);
+}
+
+.card-purple {
+  border-left-color: var(--info-color);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.card-icon {
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-title {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 500;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.card-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.card-value.green {
+  color: var(--success-color);
+}
+
+.card-value.red {
+  color: var(--error-color);
+}
+
+.card-description {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card {
+    padding: var(--spacing-md);
+  }
+
+  .card-value {
+    font-size: 24px;
+  }
+
+  .card-icon {
+    font-size: 24px;
+  }
+}

@@ -1,0 +1,76 @@
+@startuml Sequence_Ajout_Note
+
+title Ajout d'une Note - Processus Complet
+
+actor Enseignant
+participant Frontend as "Frontend\nReact"
+participant Backend as "Backend\nDjango REST"
+participant BusinessLogic as "Logique Métier\n(Calculs)"
+database DB as "Base de Données"
+participant Sync as "Synchronisation\nRésultats"
+
+Enseignant -> Frontend : 1. Saisit note\n(valeur, étudiant, matière, session)
+
+Frontend -> Frontend : 2. Validation côté client\n(0 ≤ note ≤ 20)
+
+Frontend -> Backend : 3. POST /api/notes/\n{\n  etudiant_id,\n  matiere_id,\n  session_id,\n  valeur\n}
+
+activate Backend
+
+  Backend -> Backend : 4. Authentification JWT\n& Vérification permissions\n(is_enseignant)
+
+  Backend -> BusinessLogic : 5. Valide les données\n(note 0-20, entités existent)
+
+  alt Validation réussie
+
+    BusinessLogic -> DB : 6. Crée/Modifie\nNote en BD
+    activate DB
+    DB -> DB : INSERT/UPDATE Note
+    DB --> BusinessLogic : Note sauvegardée
+    deactivate DB
+
+    BusinessLogic -> DB : 7. Récupère toutes les notes\nde l'étudiant pour la matière
+    activate DB
+    DB --> BusinessLogic : Liste des notes
+    deactivate DB
+
+    BusinessLogic -> BusinessLogic : 8. Calcule moyenne\npour la matière
+    note right of BusinessLogic
+      moyenne = moyenne(notes)
+      si moyenne >= 10 : validée
+      sinon : non-validée
+    end note
+
+    BusinessLogic -> Sync : 9. Déclenche synchronisation\ndes résultats
+
+    activate Sync
+      Sync -> DB : 10. Récalcule ResultatUE\n& ResultatSemestre
+      activate DB
+      DB -> DB : UPDATE ResultatUE, ResultatSemestre
+      DB --> Sync : Résultats mis à jour
+      deactivate DB
+    deactivate Sync
+
+    Backend -> DB : 11. Crée log d'audit\nAdminAuditLog
+    activate DB
+    DB -> DB : INSERT AdminAuditLog
+    DB --> Backend : Log créé
+    deactivate DB
+
+    Backend --> Frontend : 12. HTTP 201 Created\n{\n  id, valeur, etudiant,\n  matiere, date_saisie\n}
+
+    Frontend -> Frontend : 13. Met à jour état\n(affiche confirmation)
+
+    Frontend --> Enseignant : 14. Affiche message succès\net actualise tableau
+
+  else Validation échouée
+
+    BusinessLogic --> Backend : Erreur de validation
+    Backend --> Frontend : HTTP 400 Bad Request\n{errors: [...]}
+    Frontend --> Enseignant : Affiche erreurs
+
+  end
+
+deactivate Backend
+
+@enduml

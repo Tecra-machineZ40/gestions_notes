@@ -1,0 +1,104 @@
+/**
+ * StudentGrades.css - Styles pour la page des notes étudiants
+ */
+
+@import './variables.css';
+
+.student-grades {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.student-grades h1 {
+  font-size: 28px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Statistiques rapides */
+.grades-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  background-color: var(--bg-primary);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--primary-color);
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* Légende */
+.grades-legend {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  padding: var(--spacing-lg);
+  background-color: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.legend-item.green {
+  color: var(--success-color);
+}
+
+.legend-item.red {
+  color: var(--error-color);
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-md);
+}
+
+.legend-item.green .legend-color {
+  background-color: var(--success-color);
+}
+
+.legend-item.red .legend-color {
+  background-color: var(--error-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .grades-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .grades-legend {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+}

@@ -1,0 +1,208 @@
+/**
+ * TeacherGradeEntry.css - Styles pour la saisie des notes
+ */
+
+@import './variables.css';
+
+.teacher-grade-entry {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.teacher-grade-entry h1 {
+  font-size: 28px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.instructions {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  padding: var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--info-color);
+}
+
+/* Message feedback */
+.feedback-message {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: #d1fae5;
+  border: 1px solid var(--success-color);
+  border-radius: var(--radius-md);
+  color: var(--success-color);
+  font-weight: 500;
+  animation: slideIn 300ms ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tableau de saisie */
+.grades-table-wrapper {
+  background-color: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  overflow-x: auto;
+}
+
+.grades-input-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.grades-input-table thead {
+  background-color: var(--bg-secondary);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.grades-input-table th {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.grades-input-table tbody tr {
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--transition-fast);
+}
+
+.grades-input-table tbody tr:hover {
+  background-color: var(--bg-secondary);
+}
+
+.grades-input-table td {
+  padding: var(--spacing-md);
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.student-name {
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+.moyenne-cell {
+  background-color: var(--bg-secondary);
+  font-weight: 600;
+  color: var(--success-color);
+}
+
+/* Input dans le tableau */
+.input-grade {
+  width: 60px;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.input-grade:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Actions */
+.actions-cell {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-edit {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.btn-edit:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-save {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.btn-save:hover {
+  background-color: #059669;
+}
+
+.btn-cancel {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.btn-cancel:hover {
+  background-color: var(--text-tertiary);
+}
+
+/* Résumé */
+.summary-section {
+  background-color: var(--bg-primary);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.summary-section h3 {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.summary-section p {
+  margin: var(--spacing-sm) 0;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.summary-section strong {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .grades-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .grades-input-table {
+    min-width: 600px;
+  }
+
+  .input-grade {
+    width: 50px;
+    font-size: 12px;
+  }
+
+  .btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 12px;
+  }
+}

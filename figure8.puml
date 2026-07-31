@@ -1,0 +1,69 @@
+@startuml Flux_Donnees
+
+title Flux de Données du Système de Gestion des Notes
+
+skinparam BackgroundColor #FEFEFE
+skinparam RectangleBackgroundColor #E8F4F8
+skinparam RectangleBorderColor #0066CC
+skinparam ArrowColor #333333
+
+rectangle "ENTREE\nUtilisateur" as INPUT #E8F4F8
+rectangle "VALIDATION\nCote Client" as V_CLIENT #FFF4E8
+rectangle "VALIDATION\nCote Backend" as V_BACKEND #FFF4E8
+rectangle "LOGIQUE METIER\n(Calculs, Regles)" as LOGIC #E8F4E8
+rectangle "OPERATIONS BD\n(CRUD)" as CRUD #F4E8F4
+rectangle "FORMATAGE\nReponse (JSON)" as FORMAT #F4F4E8
+rectangle "AFFICHAGE\nFrontend" as OUTPUT #E8F4F8
+
+INPUT --> V_CLIENT
+V_CLIENT --> V_BACKEND
+V_BACKEND --> LOGIC
+LOGIC --> CRUD
+CRUD --> FORMAT
+FORMAT --> OUTPUT
+
+note right of INPUT
+  Utilisateur interagit
+  via formulaires/tableaux
+end note
+
+note right of V_CLIENT
+  Verifications:
+  - Format
+  - Longueur
+  - Type donnees
+end note
+
+note right of V_BACKEND
+  Verifications:
+  - Permissions (RBAC)
+  - Regles metier
+  - Coherence donnees
+end note
+
+note right of LOGIC
+  - Calculs (moyennes)
+  - Determinations statuts
+  - Synchronisations
+  - Logs audit
+end note
+
+note right of CRUD
+  Lectures: SELECT
+  Ecritures: INSERT/UPDATE
+  Transactions ACID
+end note
+
+note right of FORMAT
+  Serialisation JSON
+  Codes HTTP
+  En-tetes reponse
+end note
+
+note right of OUTPUT
+  Mise a jour UI
+  Notifications
+  Messages utilisateur
+end note
+
+@enduml

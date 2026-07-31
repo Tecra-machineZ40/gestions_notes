@@ -1,0 +1,262 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: #ffffff;
+}
+
+body {
+  min-height: 100vh;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt;
+    line-height: 1.35;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .no-print,
+  header,
+  nav,
+  button,
+  input,
+  select {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-header-sheet {
+    margin-bottom: 6mm !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    border: 0.3mm solid #111827;
+    padding: 4mm;
+  }
+
+  .report-header {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1fr;
+    gap: 3mm;
+    align-items: start;
+    margin-bottom: 4mm;
+  }
+
+  .report-left,
+  .report-center,
+  .report-right {
+    text-align: center;
+  }
+
+  .report-line {
+    font-size: 8.7pt;
+    line-height: 1.25;
+    margin-bottom: 0.8mm;
+  }
+
+  .report-strong {
+    font-weight: 700;
+  }
+
+  .report-logo,
+  .report-logo-placeholder {
+    width: 18mm;
+    height: 18mm;
+    margin: 1.8mm auto 0;
+    border: 0.25mm solid #111827;
+    object-fit: contain;
+    background: #ffffff;
+  }
+
+  .report-logo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7pt;
+    color: #6b7280;
+  }
+
+  .report-year {
+    color: #b91c1c;
+    font-weight: 700;
+    font-size: 13pt;
+    margin-bottom: 1.4mm;
+  }
+
+  .report-title-box {
+    border: 0.3mm solid #111827;
+    padding: 1.5mm 1.8mm;
+    font-size: 10pt;
+    font-weight: 700;
+    margin: 0 auto 2mm;
+    max-width: 78mm;
+  }
+
+  .report-program {
+    font-size: 14pt;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .student-info {
+    border: 0.25mm solid #111827;
+    padding: 2.2mm;
+    margin-bottom: 3.2mm;
+    display: grid;
+    gap: 1.3mm;
+  }
+
+  .student-row {
+    display: grid;
+    grid-template-columns: 22mm 1fr;
+    align-items: center;
+    column-gap: 2mm;
+    font-size: 9.5pt;
+  }
+
+  .student-label {
+    font-weight: 700;
+  }
+
+  .matricule-row {
+    align-items: start;
+  }
+
+  .matricule-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8mm;
+  }
+
+  .matricule-box {
+    width: 6.5mm;
+    height: 6.5mm;
+    border: 0.25mm solid #111827;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9pt;
+    font-weight: 600;
+  }
+
+  .report-meta-grid {
+    border-top: 0.2mm solid #cbd5e1;
+    padding-top: 2mm;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.4mm 3mm;
+    font-size: 8.8pt;
+  }
+
+  main {
+    background: #ffffff !important;
+    padding: 0 !important;
+  }
+
+  .results-print-page {
+    display: block !important;
+  }
+
+  .results-print-section {
+    border-color: #94a3b8 !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 8mm !important;
+    padding: 0 !important;
+  }
+
+  .results-print-section h2 {
+    margin: 0 !important;
+    padding: 3mm 3mm 2mm 3mm !important;
+    border-bottom: 1px solid #cbd5e1 !important;
+    font-size: 12pt !important;
+  }
+
+  .results-table {
+    page-break-inside: auto;
+    break-inside: auto;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: fixed;
+    page-break-inside: auto;
+    break-inside: auto;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  th,
+  td {
+    border: 1px solid #cbd5e1 !important;
+    padding: 2.5mm !important;
+    vertical-align: top;
+    word-break: break-word;
+  }
+
+  th {
+    background: #f8fafc !important;
+    font-size: 9pt !important;
+    letter-spacing: 0.02em !important;
+    text-transform: uppercase;
+  }
+
+  td {
+    font-size: 9.5pt !important;
+  }
+}

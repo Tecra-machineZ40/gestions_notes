@@ -1,0 +1,47 @@
+@startuml Sequence_Authentification
+
+title Authentification JWT - Connexion Utilisateur
+
+actor Utilisateur
+participant Frontend as "Frontend\nReact"
+participant Backend as "Backend\nDjango REST"
+database DB as "Base de Données"
+participant JWT as "Module JWT"
+
+Utilisateur -> Frontend : 1. Saisit identifiants\n(email, mot de passe)
+
+Frontend -> Backend : 2. POST /api/auth/login\n{email, password}
+
+activate Backend
+  Backend -> DB : 3. Récupère CustomUser\npar email
+  activate DB
+  DB --> Backend : CustomUser trouvé
+  deactivate DB
+
+  Backend -> Backend : 4. Vérifie mot de passe\ncheck_password()
+
+  alt Identifiants valides
+    Backend -> JWT : 5. Génère tokens
+    activate JWT
+      JWT --> Backend : access_token (15 min)\nrefresh_token (7 jours)
+    deactivate JWT
+
+    Backend -> DB : 6. Récupère profil utilisateur\n(user_id, role, email)
+    activate DB
+    DB --> Backend : Données profil
+    deactivate DB
+
+    Backend --> Frontend : 7. HTTP 200 OK\n{\n  access_token,\n  refresh_token,\n  user: {id, email, role}\n}
+
+    Frontend -> Frontend : 8. Stocke tokens\n(localStorage/sessionStorage)
+    Frontend -> Frontend : 9. Définit header d'autorisation\n"Authorization: Bearer <access_token>"
+    Frontend --> Utilisateur : 10. Redirige vers Dashboard
+
+  else Identifiants invalides
+    Backend --> Frontend : HTTP 401 Unauthorized\n{error: "Identifiants invalides"}
+    Frontend --> Utilisateur : Affiche message erreur
+  end
+
+deactivate Backend
+
+@enduml

@@ -1,0 +1,107 @@
+@startuml Use_Cases
+
+title Diagramme des Cas d'Utilisation - Gestion des Notes
+
+skinparam BackgroundColor #FEFEFE
+skinparam ActorBackgroundColor #E8F4F8
+skinparam ActorBorderColor #0066CC
+skinparam UsecaseBackgroundColor #FFF4E8
+skinparam UsecaseBorderColor #CC6600
+
+actor Etudiant as ETU
+actor Enseignant as ENS
+actor Superviseur as SUP
+actor Administrateur as ADM
+
+rectangle "Système de Gestion des Notes" {
+
+  usecase "S'authentifier\navec JWT" as UC_AUTH
+  usecase "Consulter ses notes" as UC_CONS_NOTES
+  usecase "Visualiser moyennes" as UC_CONS_MOY
+  usecase "Consulter resultats\npar semestre" as UC_CONS_RES
+  
+  usecase "Ajouter une note" as UC_ADD_NOTE
+  usecase "Modifier une note" as UC_MOD_NOTE
+  usecase "Consulter etudiants\nde sa classe" as UC_CONS_ETU
+  
+  usecase "Valider inscription\nincluant preuve" as UC_VAL_INS
+  usecase "Consulter toutes\nles notes" as UC_CONS_ALL_NOTES
+  usecase "Générer rapports\nde resultats" as UC_GEN_RAPPORT
+  usecase "Suivre activites\nenseignants" as UC_AUDIT
+  
+  usecase "Gérer comptes\nutilisateurs" as UC_MANAGE_USER
+  usecase "Attribuer roles" as UC_ASSIGN_ROLE
+  usecase "Gérer annees\nacademiques" as UC_MANAGE_ANNEE
+  usecase "Gérer UE et matieres" as UC_MANAGE_UE
+  usecase "Superviser\nsysteme global" as UC_SUPERVISE
+  
+  usecase "Envoyer notifications" as UC_NOTIF
+  usecase "Gerer audit logs" as UC_AUDIT_LOG
+}
+
+ETU --> UC_AUTH
+ETU --> UC_CONS_NOTES
+ETU --> UC_CONS_MOY
+ETU --> UC_CONS_RES
+
+ENS --> UC_AUTH
+ENS --> UC_ADD_NOTE
+ENS --> UC_MOD_NOTE
+ENS --> UC_CONS_ETU
+
+SUP --> UC_AUTH
+SUP --> UC_VAL_INS
+SUP --> UC_CONS_ALL_NOTES
+SUP --> UC_GEN_RAPPORT
+SUP --> UC_AUDIT
+
+ADM --> UC_AUTH
+ADM --> UC_MANAGE_USER
+ADM --> UC_ASSIGN_ROLE
+ADM --> UC_MANAGE_ANNEE
+ADM --> UC_MANAGE_UE
+ADM --> UC_SUPERVISE
+ADM --> UC_AUDIT_LOG
+ADM --> UC_CONS_ALL_NOTES
+
+UC_CONS_NOTES .> UC_AUTH : inclut
+UC_CONS_MOY .> UC_AUTH : inclut
+UC_CONS_RES .> UC_AUTH : inclut
+UC_ADD_NOTE .> UC_AUTH : inclut
+UC_MOD_NOTE .> UC_AUTH : inclut
+UC_CONS_ETU .> UC_AUTH : inclut
+UC_VAL_INS .> UC_AUTH : inclut
+UC_CONS_ALL_NOTES .> UC_AUTH : inclut
+
+UC_ADD_NOTE ..> UC_NOTIF : déclenche
+UC_MOD_NOTE ..> UC_NOTIF : déclenche
+UC_VAL_INS ..> UC_NOTIF : déclenche
+
+UC_ADD_NOTE ..> UC_AUDIT_LOG : enregistre
+UC_MOD_NOTE ..> UC_AUDIT_LOG : enregistre
+UC_MANAGE_USER ..> UC_AUDIT_LOG : enregistre
+UC_ASSIGN_ROLE ..> UC_AUDIT_LOG : enregistre
+
+note right of ETU
+  Accès limité aux
+  données personnelles
+  et resultats
+end note
+
+note right of ENS
+  Gestion des notes
+  de sa classe/matière
+end note
+
+note right of SUP
+  Vision complete
+  validation comptes
+  audit complet
+end note
+
+note right of ADM
+  Acces total
+  gestion système
+end note
+
+@enduml

@@ -1,0 +1,215 @@
+@startuml Diagramme_Classes_UML
+
+skinparam backgroundColor #FEFEFE
+title Diagramme de Classes UML - Domaine Métier
+
+abstract class CustomUser {
+  - id : int
+  - email : string
+  - password_hash : string
+  - first_name : string
+  - last_name : string
+  - role : Role
+  - is_active : boolean
+  --
+  + authenticate(password: string) : boolean
+  + get_profile() : Profile
+  + is_in_group(role: Role) : boolean
+  + set_password(password: string) : void
+}
+
+class Etudiant {
+  - matricule : string
+  - niveau : int
+  - numero_inscription : string
+  --
+  + get_moyenne_semestre(semestre: Semestre) : decimal
+  + get_moyenne_ue(ue: UE) : decimal
+  + get_resultats() : List<Resultat>
+  + valider_inscription() : boolean
+  + sync_resultats() : void
+}
+
+class Enseignant {
+  - numero_employee : string
+  - specialite : string
+  - departement : string
+  --
+  + creer_note(note: Note) : void
+  + modifier_note(note: Note) : void
+  + get_matieres() : List<Matiere>
+  + get_etudiants_classe(classe: Classe) : List<Etudiant>
+}
+
+class Superviseur {
+  - titre : string
+  - responsabilites : string
+  --
+  + valider_inscription(etudiant: Etudiant) : void
+  + rejeter_inscription(etudiant: Etudiant, raison: string) : void
+  + consulter_notes_classe(classe: Classe) : List<Note>
+  + generer_rapport_resultats() : Rapport
+  + verifier_preuve(etudiant: Etudiant) : Preuve
+}
+
+class Classe {
+  - id : int
+  - nom : string
+  - code : string
+  - niveau : int
+  - superviseur : Superviseur
+  --
+  + get_etudiants() : List<Etudiant>
+  + get_ues() : List<UE>
+  + get_resultats_semestre(semestre: Semestre) : List<Resultat>
+}
+
+class AnneeAcademique {
+  - id : int
+  - libelle : string
+  - annee_debut : int
+  - annee_fin : int
+  - is_active : boolean
+  --
+  + get_semestres() : List<Semestre>
+  + cloturer_annee() : void
+  + est_active() : boolean
+}
+
+class Semestre {
+  - id : int
+  - numero : int
+  - libelle : string
+  - date_debut : date
+  - date_fin : date
+  --
+  + get_ues() : List<UE>
+  + get_resultats_etudiants() : List<Resultat>
+  + est_en_cours() : boolean
+}
+
+class UE {
+  - id : int
+  - code : string
+  - libelle : string
+  - credits : int
+  - coefficient : decimal
+  --
+  + get_matieres() : List<Matiere>
+  + calculer_moyenne(etudiant: Etudiant) : decimal
+  + est_validee(etudiant: Etudiant) : boolean
+}
+
+class Matiere {
+  - id : int
+  - code : string
+  - libelle : string
+  - type : TypeMatiere
+  - enseignant : Enseignant
+  --
+  + get_notes(etudiant: Etudiant) : List<Note>
+  + get_session_active() : Session
+  + calculer_moyenne_etudiants() : decimal
+}
+
+class Session {
+  - id : int
+  - numero : int
+  - libelle : string
+  - date_session : date
+  - type : TypeSession
+  --
+  + est_active() : boolean
+  + get_notes() : List<Note>
+}
+
+class Note {
+  - id : int
+  - valeur : decimal
+  - date_saisie : datetime
+  - etudiant : Etudiant
+  - matiere : Matiere
+  - session : Session
+  --
+  + valider() : boolean
+  + est_comprise_entre_0_et_20() : boolean
+  + get_appreciation() : string
+  + synchroniser_resultats() : void
+}
+
+class ResultatUE {
+  - id : int
+  - moyenne : decimal
+  - statut : StatutValidation
+  - date_calcul : datetime
+  --
+  + calculer_from_notes() : void
+  + determiner_statut() : StatutValidation
+  + est_validee() : boolean
+}
+
+class ResultatSemestre {
+  - id : int
+  - moyenne : decimal
+  - credits_acquis : int
+  - date_calcul : datetime
+  --
+  + calculer_from_ues() : void
+  + est_admis() : boolean
+}
+
+class CodeInscription {
+  - code : string
+  - statut : StatutCode
+  - date_expiration : date
+  --
+  + est_valide() : boolean
+  + est_utilise() : boolean
+  + utiliser() : void
+}
+
+class AdminAuditLog {
+  - id : int
+  - action : string
+  - entite : string
+  - ancien_valeur : string
+  - nouveau_valeur : string
+  - timestamp : datetime
+  --
+  + log_action(user: CustomUser, action: string) : void
+}
+
+CustomUser <|-- Etudiant
+CustomUser <|-- Enseignant
+CustomUser <|-- Superviseur
+
+Etudiant "1" *-- "*" Note : saisit
+Etudiant "1" *-- "*" ResultatUE : obtient
+Etudiant "1" *-- "*" ResultatSemestre : obtient
+Etudiant "1" *-- "1" CodeInscription : possède
+
+Enseignant "1" *-- "*" Matiere : enseigne
+Enseignant "1" *-- "*" Note : crée
+
+Superviseur "1" -- "*" Classe : supervise
+
+Classe "1" *-- "*" UE : propose
+Classe "1" *-- "*" Etudiant : inscrit
+
+AnneeAcademique "1" *-- "*" Semestre : contient
+AnneeAcademique "1" *-- "*" Classe : organise
+
+Semestre "1" *-- "*" UE : offre
+
+UE "1" *-- "*" Matiere : contient
+UE "1" *-- "*" ResultatUE : évalue
+
+Matiere "1" *-- "*" Session : propose
+Matiere "1" *-- "0..1" Enseignant : enseignée_par
+
+Session "1" *-- "*" Note : contient
+
+ResultatUE "1" -- "*" Note : synthétise
+ResultatSemestre "1" -- "*" ResultatUE : compile
+
+@enduml
