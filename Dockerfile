@@ -19,7 +19,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 6. Copier le reste du code du projet
-COPY . .
+COPY backend/ .
 
 # 7. Collecter les fichiers statiques de Django pour la production
 RUN python manage.py collectstatic --noinput
