@@ -245,7 +245,7 @@ copy .env.example .env
 ../venv/Scripts/python.exe manage.py runserver 8000
 ```
 
-Backend runs on: http://127.0.0.1:8000
+Backend runs on: 
 
 ### 4) Frontend setup
 ```bash
