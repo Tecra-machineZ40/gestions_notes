@@ -6,12 +6,13 @@
 import axios from 'axios';
 
 //const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-// 🚀 Détection automatique et dynamique de l'environnement (Production vs Local)
+// 🚀 Détection dynamique incluant le sous-dossier /api indispensable pour Django
 const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
 
 const API_BASE_URL = isProduction 
-  ? 'https://gestions-notes.onrender.com' 
+  ? 'https://onrender.com' 
   : 'http://localhost:8000/api';
+
 
 
 
