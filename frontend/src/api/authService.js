@@ -5,7 +5,15 @@
 
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+//const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+// 🚀 Détection automatique et dynamique de l'environnement (Production vs Local)
+const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
+
+const API_BASE_URL = isProduction 
+  ? 'https://gestions-notes1.onrender.com' 
+  : 'http://localhost:8000/api';
+
+
 
 // Instance axios pour l'authentification
 const authClient = axios.create({
