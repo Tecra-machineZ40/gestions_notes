@@ -10,7 +10,7 @@ import axios from 'axios';
 const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
 
 const API_BASE_URL = isProduction 
-  ? 'https://gestions-notes1.onrender.com' 
+  ? 'https://gestions-notes.onrender.com' 
   : 'http://localhost:8000/api';
 
 
