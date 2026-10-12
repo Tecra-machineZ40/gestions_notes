@@ -33,7 +33,7 @@ const authClient = axios.create({
  */
 export const login = async (username, password) => {
   try {
-    const response = await authClient.post('/token/', {
+    const response = await authClient.post('token/', {
       username,
       password,
     });
@@ -65,7 +65,7 @@ export const login = async (username, password) => {
  */
 export const refreshAccessToken = async (refreshToken) => {
   try {
-    const response = await authClient.post('/token/refresh/', {
+    const response = await authClient.post('token/refresh/', {
       refresh: refreshToken,
     });
 
