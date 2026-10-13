@@ -10,7 +10,7 @@ import axios from 'axios';
 const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
 
 const API_BASE_URL = isProduction 
-  ? 'https://onrender.com' 
+  ? 'https://gestions-notes1.onrender.com/api' 
   : 'http://localhost:8000/api';
 
 
@@ -33,7 +33,7 @@ const authClient = axios.create({
  */
 export const login = async (username, password) => {
   try {
-    const response = await authClient.post('token/', {
+    const response = await authClient.post('api/token/', {
       username,
       password,
     });
@@ -65,7 +65,7 @@ export const login = async (username, password) => {
  */
 export const refreshAccessToken = async (refreshToken) => {
   try {
-    const response = await authClient.post('token/refresh/', {
+    const response = await authClient.post('api/token/refresh/', {
       refresh: refreshToken,
     });
 
