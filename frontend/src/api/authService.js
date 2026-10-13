@@ -5,15 +5,7 @@
 
 import axios from 'axios';
 
-//const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-// 🚀 Détection dynamique incluant le sous-dossier /api indispensable pour Django
-const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
-
-const API_BASE_URL = isProduction 
-  ? 'https://gestions-notes1.onrender.com/api' 
-  : 'http://localhost:8000/api';
-
-
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 
 // Instance axios pour l'authentification
@@ -33,7 +25,7 @@ const authClient = axios.create({
  */
 export const login = async (username, password) => {
   try {
-    const response = await authClient.post('api/token/', {
+    const response = await authClient.post('token/', {
       username,
       password,
     });
@@ -65,7 +57,7 @@ export const login = async (username, password) => {
  */
 export const refreshAccessToken = async (refreshToken) => {
   try {
-    const response = await authClient.post('api/token/refresh/', {
+    const response = await authClient.post('token/refresh/', {
       refresh: refreshToken,
     });
 
