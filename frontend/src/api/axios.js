@@ -7,8 +7,9 @@
 import axios from "axios";
 import * as authService from "./authService";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+const API_BASE_URL = import.meta.env.PROD
+  ? "https://gestions-notes1.onrender.com/api"
+  : (import.meta.env.VITE_API_URL || "http://localhost:8000/api");
 
 // ============================================================================
 // 🔧 INSTANCE AXIOS
